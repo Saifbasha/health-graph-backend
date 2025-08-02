@@ -15,7 +15,7 @@ import com.saifproject.healthUpdate.service.PatientService;
 import com.saifproject.healthUpdate.util.ResponseStructure;
 
 @RestController
-@ CrossOrigin(origins = "http://localhost:3000")
+@ CrossOrigin(origins = "*")
 public class PatientController {
 	
 	@Autowired
