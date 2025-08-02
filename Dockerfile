@@ -1,14 +1,13 @@
-# Use OpenJDK 17 as base image
-FROM openjdk:17-jdk-slim
-
-# Set working directory in container
+# Stage 1: Build the JAR using Maven
+FROM maven:3.9.6-eclipse-temurin-17 AS builder
 WORKDIR /app
+COPY pom.xml .
+COPY src ./src
+RUN mvn clean package -DskipTests
 
-# Copy JAR file from target folder to container
-COPY target/healthUpdate-0.0.1-SNAPSHOT.jar  app.jar
-
-# Expose port 8081
+# Stage 2: Run the JAR
+FROM openjdk:17-jdk-slim
+WORKDIR /app
+COPY --from=builder /app/target/healthUpdate-0.0.1-SNAPSHOT..jar app.jar
 EXPOSE 8081
-
-# Run the Spring Boot JAR
 ENTRYPOINT ["java", "-jar", "app.jar"]
